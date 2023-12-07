@@ -22,13 +22,13 @@ app.initializers.add('katosdev-signature', () => {
         label: app.translator.trans('signature.admin.permissions.edit_signature_others'),
       },
       'moderate'
-    );
+    )
     .registerPermission(
       {
         permission: 'user.allowSignature',
         icon: 'fas fa-signature',
         label: app.translator.trans('signature.admin.permissions.allow_signature'),
       },
-      'moderate'
-    );  
+      'start'
+    );
 });

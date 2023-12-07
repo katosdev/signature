@@ -1,0 +1,72 @@
+.SignatureEditor {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; // Align items to the start of the flex container
+    padding: 20px;
+    background: @control-bg;
+    border-radius: @border-radius;
+    box-shadow: 0 2px 4px @shadow-color;
+    margin-bottom: 20px; // Spacing from the next element
+    max-width: 100%; // Prevents the editor from overflowing its container
+  
+    .TextEditor {
+      width: 100%; // Ensure the editor takes the full width
+      margin-bottom: 10px; // Spacing between editor and button
+      border: 1px solid darken(@control-bg, 5%);
+      border-radius: @border-radius;
+
+      &-controls {
+        margin: unset;
+      }
+  
+      // Specific styling for the toolbar if needed
+    //   .TextEditor-toolbar {
+    //     border-bottom: 1px solid darken(@control-bg, 5%);
+    //     background-color: lighten(@control-bg, 5%);
+    //     padding: 0 8px; // Padding inside the toolbar for better alignment
+    //   }
+  
+    //   // Ensure the editor's content area matches the styling
+    //   .TextEditor-content {
+    //     min-height: 150px; // Minimum height for the text area
+    //     border: none; // Removing border inside the editor content if there's any
+    //   }
+    }
+  
+    // .Button {
+    //   background-color: @primary-color;
+    //   color: @body-bg;
+    //   border: none;
+    //   padding: 10px 20px;
+    //   margin-top: 10px;
+    //   border-radius: @border-radius;
+    //   cursor: pointer;
+    //   transition: background-color 0.2s;
+    //   align-self: center; // Align the button to the center of the flex container
+  
+    //   &:hover {
+    //     background-color: darken(@primary-color, 5%);
+    //   }
+  
+    //   &:active {
+    //     background-color: darken(@primary-color, 10%);
+    //   }
+    // }
+  }
+  
+  // Responsive design adjustments for smaller screens
+  @media @phone {
+    .SignatureEditor {
+      padding: 15px;
+  
+      .TextEditor-toolbar {
+        padding: 0 4px; // Reduce padding on smaller screens
+      }
+  
+      .Button {
+        padding: 8px 16px; // Slightly reduce padding for the button
+        width: 100%; // Full width on mobile for easier tap
+      }
+    }
+  }
+  
