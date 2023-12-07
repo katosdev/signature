@@ -23,4 +23,12 @@ app.initializers.add('katosdev-signature', () => {
       },
       'moderate'
     );
+    .registerPermission(
+      {
+        permission: 'user.allowSignature',
+        icon: 'fas fa-signature',
+        label: app.translator.trans('signature.admin.permissions.allow_signature'),
+      },
+      'moderate'
+    );  
 });
