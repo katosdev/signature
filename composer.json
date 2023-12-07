@@ -22,8 +22,8 @@
     ],
     "require": {
         "flarum/core": "^1.2.0",
-        "symfony/dom-crawler": "^6.0.2",
-        "symfony/css-selector": "^6.0.2"
+        "symfony/dom-crawler": "^5.0 || ^6.0.2",
+        "symfony/css-selector": "^5.0 || ^6.0.2"
     },
     "autoload": {
         "psr-4": {
