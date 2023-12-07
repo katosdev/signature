@@ -9,11 +9,21 @@
     ],
     "type": "flarum-extension",
     "license": "MIT",
+    "support": {
+        "source": "https://github.com/katosdev/signature",
+        "issues": "https://github.com/katosdev/signature/issues",
+        "forum": "https://discuss.flarum.org/d/28108"
+    },
+    "funding": [
+        {
+            "type": "website",
+            "url": "https://www.buymeacoffee.com/katos"
+        }
+    ],
     "require": {
-        "flarum/core": "^1.0.0",
-        "symfony/dom-crawler":"^6.0.2",
-        "symfony/css-selector":"^6.0.2",
-        "fof/components": "^1.0.0"
+        "flarum/core": "^1.2.0",
+        "symfony/dom-crawler": "^6.0.2",
+        "symfony/css-selector": "^6.0.2"
     },
     "autoload": {
         "psr-4": {
@@ -24,11 +34,46 @@
         "flarum-extension": {
             "title": "Signature",
             "category": "feature",
-            "icon" : {
-                "name" : "fas fa-pen-square",
-                "backgroundColor" : "#f55c7a",
+            "icon": {
+                "name": "fas fa-pen-square",
+                "backgroundColor": "#f55c7a",
                 "color": "#ffffff"
             }
+        },
+        "flarum-cli": {
+            "modules": {
+                "githubActions": true,
+                "backendTesting": true
+            }
+        }
+    },
+    "require-dev": {
+        "flarum/phpstan": "*",
+        "flarum/testing": "^1.0.0",
+        "flarum/bbcode": "*",
+        "flarum/markdown": "*"
+    },
+    "scripts": {
+        "analyse:phpstan": "phpstan analyse",
+        "clear-cache:phpstan": "phpstan clear-result-cache",
+        "test": [
+            "@test:unit",
+            "@test:integration"
+        ],
+        "test:unit": "phpunit -c tests/phpunit.unit.xml",
+        "test:integration": "phpunit -c tests/phpunit.integration.xml",
+        "test:setup": "@php tests/integration/setup.php"
+    },
+    "scripts-descriptions": {
+        "analyse:phpstan": "Run static analysis",
+        "test": "Runs all tests.",
+        "test:unit": "Runs all unit tests.",
+        "test:integration": "Runs all integration tests.",
+        "test:setup": "Sets up a database for use with integration tests. Execute this only once."
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "katosdev\\Signature\\Tests\\": "tests/"
         }
     }
 }
