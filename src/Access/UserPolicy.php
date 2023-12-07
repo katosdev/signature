@@ -13,4 +13,12 @@ class UserPolicy extends AbstractPolicy
             return $this->allow();
         }
     }
+
+    public function allowSignature(User $actor, User $user)
+    {
+        if ($actor->cannot('user.allowSignature') {
+            return $this->deny()
+        }
+    }
+
 }
