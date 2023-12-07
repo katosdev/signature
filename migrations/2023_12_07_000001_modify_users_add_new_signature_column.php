@@ -6,12 +6,13 @@ use Illuminate\Database\Schema\Builder;
 return [
     'up' => function (Builder $schema) {
         $schema->table('users', function (Blueprint $table) {
-            $table->text('signature')->nullable()->default(null)->change();
+            $table->text('signature')->nullable()->default(null);
+            
         });
     },
     'down' => function (Builder $schema) {
         $schema->table('users', function (Blueprint $table) {
-            $table->text('signature')->change();
+            $table->dropColumn('signature');
         });
     }
 ];
