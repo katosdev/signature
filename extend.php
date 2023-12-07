@@ -1,43 +1,39 @@
 <?php
 
-use Illuminate\Contracts\Events\Dispatcher;
-use katosdev\Signature\Validation\ValidateSignature;
-use katosdev\Signature\Model;
+namespace katosdev\Signature;
+
 use Flarum\Extend;
 use Flarum\User\User;
 use Flarum\Api\Serializer\UserSerializer;
-use Flarum\Frontend\Document;
-use FoF\Components\Extend\AddFofComponents;
+use Flarum\User\Event\Saving as UserSaving;
 
 return [
-    new AddFofComponents(),
-
-    (new Extend\Frontend('forum'))
-        ->content(function (Document $document) {
-            $document->head[] = '<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script>window.jQuery || document.write(\'<script src="js/vendor/jquery-3.3.1.min.js"><\/script>\')</script><script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.4.0/trumbowyg.js"></script>';
-        }),
-
-    new Extend\Locales(__DIR__ . '/locale'),
-
-    (new Flarum\Extend\ApiSerializer(UserSerializer::class))
-        ->attributes(function (UserSerializer $serializer, User $user, array $attributes) {
-            $attributes['signature'] = $user->signature;
-
-            return $attributes;
-        }),
-
     (new Extend\Frontend('forum'))
         ->js(__DIR__ . '/js/dist/forum.js')
-        ->css(__DIR__ . '/less/signature.less')
-        ->css(__DIR__ . '/less/trumbowyg.less')
-        ->route('/settings/signature', 'settings.signature', \Flarum\Forum\Content\AssertRegistered::class),
+        ->css(__DIR__ . '/less/forum.less')
+        ->route('/u:username/signature', 'user.signature'),
 
     (new Extend\Frontend('admin'))
         ->js(__DIR__ . '/js/dist/admin.js'),
 
-    (new Extend\Routes('api'))
-        ->post('/settings/signature/validate', 'settings.signature', ValidateSignature::class),
+    new Extend\Locales(__DIR__ . '/locale'),
+
+    (new Extend\ApiSerializer(UserSerializer::class))
+        ->attributes(Api\AddUserAttributes::class),
 
     (new Extend\Event())
-        ->subscribe(Model\UserSignatureAttributes::class),
+        ->listen(UserSaving::class, Listener\SaveSignatureToDatabase::class),
+
+    (new Extend\Settings())
+        ->default('signature.maximum_char_limit', 500)
+        ->default('signature.maximum_image_count', 2),
+
+    (new Extend\Model(User::class))
+        ->cast('signature', 'string'),
+
+    (new Extend\Policy())
+        ->modelPolicy(User::class, Access\UserPolicy::class),
+
+    (new Extend\ServiceProvider())
+        ->register(Provider\SignatureFormatterProvider::class),
 ];
