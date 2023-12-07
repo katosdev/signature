@@ -6,6 +6,8 @@ signature:
         errors:
              max_char_limit_exceed: Maximum character limit exceeded.
              max_image_count_exceed: Maximum image count exceeded.
+        profile:
+            click: Click to write your signature
     admin:
         permissions:
             edit_signature_others: Edit other users' signatures
