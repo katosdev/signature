@@ -42,9 +42,14 @@ export default class Signature extends Component<SignatureAttrs> {
           placeholder="Edit your signature here"
           composer={this.signatureState}
           submitLabel={app.translator.trans('signature.forum.buttons.save')}
+          onsubmit={this.onEditorSubmit.bind(this)}
         />
       </div>
     );
+  }
+
+  onEditorSubmit() {
+    this.save();
   }
 
   renderSignature() {
