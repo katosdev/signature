@@ -8,7 +8,7 @@ import ItemList from 'flarum/common/utils/ItemList';
 export default function extendUserPage() {
   extend(UserPage.prototype, 'navItems', function (items: ItemList<Mithril.Children>) {
     if (app.session.user) {
-      if (this.user?.id() === app.session.user.id() || app.session.user.id() == 1) {
+      if (this.user?.id() === app.session.user.id() || app.session.user.canEditSignature()) {
         items.add(
           'signature',
           <LinkButton
