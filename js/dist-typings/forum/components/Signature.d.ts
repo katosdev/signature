@@ -5,6 +5,7 @@ import type Mithril from 'mithril';
 interface SignatureAttrs extends ComponentAttrs {
     user: User;
     readonly?: boolean;
+    state?: SignatureState;
 }
 export default class Signature extends Component<SignatureAttrs> {
     signatureState: SignatureState;
