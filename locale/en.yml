@@ -11,6 +11,7 @@ signature:
     admin:
         permissions:
             edit_signature_others: Edit other users' signatures
+            allow_signature: Allow users to use signatures
         settings:
             maximum_image_count:
                 description : Maximum inserted images.
