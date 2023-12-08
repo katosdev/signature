@@ -3,6 +3,7 @@ signature:
         buttons:
             signature: Signature
             save: Save Signature
+            edit: Edit Signature
         errors:
              max_char_limit_exceed: Maximum character limit exceeded.
              max_image_count_exceed: Maximum image count exceeded.

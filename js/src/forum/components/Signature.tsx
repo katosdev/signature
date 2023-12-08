@@ -11,6 +11,7 @@ import type Mithril from 'mithril';
 interface SignatureAttrs extends ComponentAttrs {
   user: User;
   readonly?: boolean;
+  state?: SignatureState;
 }
 
 export default class Signature extends Component<SignatureAttrs> {
@@ -21,7 +22,7 @@ export default class Signature extends Component<SignatureAttrs> {
   oninit(vnode: Mithril.Vnode<SignatureAttrs, this>) {
     super.oninit(vnode);
     this.user = vnode.attrs.user;
-    this.signatureState = new SignatureState();
+    this.signatureState = this.attrs.state || new SignatureState();
     this.signatureState.setContent(Stream(this.user.signature() || ''));
   }
 
