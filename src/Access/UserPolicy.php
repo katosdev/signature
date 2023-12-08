@@ -9,6 +9,10 @@ class UserPolicy extends AbstractPolicy
 {
     public function editSignature(User $actor, User $user)
     {
+        if ($user->isAdmin() && !$actor->isAdmin()) {
+            return $this->deny();
+        }
+        
         if ($actor->id === $user->id || $actor->can('user.editSignature')) {
             return $this->allow();
         }

@@ -18,10 +18,12 @@ class UserAttributesTest extends TestCase
         $this->prepareDatabase([
             'users' => [
                 $this->normalUser(),
-                ['id' => 3, 'username' => 'moderator', 'email' => 'moderator@machine.local', 'is_email_confirmed' => true]
+                ['id' => 3, 'username' => 'moderator', 'email' => 'moderator@machine.local', 'is_email_confirmed' => true],
+                ['id' => 4, 'username' => 'admin2', 'email' => 'admin2@machine.local', 'is_email_confirmed' => true],
             ],
             'group_user' => [
-                ['user_id' => 3, 'group_id' => 4]
+                ['user_id' => 3, 'group_id' => 4],
+                ['user_id' => 4, 'group_id' => 1],
             ],
             'group_permission' => [
                 ['group_id' => 4, 'permission' => 'user.editSignature']
@@ -84,6 +86,38 @@ class UserAttributesTest extends TestCase
     {
         $response = $this->send(
             $this->request('GET', '/api/users/2', ['authenticatedAs' => 3])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $json = json_decode($response->getBody(), true);
+
+        $this->assertTrue($json['data']['attributes']['canEditSignature']);
+    }
+
+    /**
+     * @test
+     */
+    public function user_with_permission_cannot_edit_admin_signature()
+    {
+        $response = $this->send(
+            $this->request('GET', '/api/users/1', ['authenticatedAs' => 3])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $json = json_decode($response->getBody(), true);
+
+        $this->assertFalse($json['data']['attributes']['canEditSignature']);
+    }
+
+    /**
+     * @test
+     */
+    public function admin_can_edit_admin_signature()
+    {
+        $response = $this->send(
+            $this->request('GET', '/api/users/1', ['authenticatedAs' => 4])
         );
 
         $this->assertEquals(200, $response->getStatusCode());
