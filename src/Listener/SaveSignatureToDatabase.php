@@ -52,6 +52,7 @@ class SaveSignatureToDatabase
             $actor = $event->actor;
 
             $actor->assertCan('editSignature', $user);
+            $actor->assertCan('allowSignature', $user);
 
             $this->validator->assertValid(Arr::only($attributes, 'signature'));
 

@@ -22,6 +22,7 @@ class AddUserAttributes
             $attributes['signatureHtml'] = $this->formatter->render($user->signature);
         }
         $attributes['canEditSignature'] = $serializer->getActor()->can('editSignature', $user);
+        $attributes['canUseSignature'] = $serializer->getActor()->can('allowSignature', $user);
 
         return $attributes;
     }
