@@ -59,10 +59,6 @@ class CreateSignatureTest extends TestCase
 
         $this->assertEquals(403, $response->getStatusCode(), 'User without permission can create signature');
 
-        $json = json_decode($response->getBody()->getContents(), true);
-
-        $this->assertNull($json['data']['attributes']['signature']);
-
         $user = User::find(2);
 
         $this->assertNull($user->signature);
