@@ -9,5 +9,6 @@ export default [
   new Extend.Model(User) //
     .attribute<string>('signature')
     .attribute<string>('signatureHtml')
-    .attribute<boolean>('canEditSignature'),
+    .attribute<boolean>('canEditSignature')
+    .attribute<boolean>('canUseSignature'),
 ];

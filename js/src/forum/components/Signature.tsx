@@ -33,8 +33,8 @@ export default class Signature extends Component<SignatureAttrs> {
       </div>
     );
   }
-
   renderEditor() {
+    if (this.user.canEditSignature()) {
     return (
       <div class="SignatureEditor">
         <TextEditor
@@ -47,6 +47,7 @@ export default class Signature extends Component<SignatureAttrs> {
         />
       </div>
     );
+    }
   }
 
   onEditorSubmit() {
