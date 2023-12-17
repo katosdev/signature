@@ -19,9 +19,9 @@ class CreateSignatureTest extends TestCase
         $this->prepareDatabase([
             'users' => [
                 $this->normalUser(),
-                ['id' => 2, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'is_email_confirmed' => true],
-                ['id' => 3, 'username' => 'moderator', 'email' => 'moderator@machine.local'],
-                ['id' => 4, 'username' => 'normal3', 'email' => 'normal3@machine.local', 'is_email_confirmed' => true],
+                ['id' => 3, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'is_email_confirmed' => true],
+                ['id' => 4, 'username' => 'moderator', 'email' => 'moderator@machine.local'],
+                ['id' => 5, 'username' => 'normal3', 'email' => 'normal3@machine.local', 'is_email_confirmed' => true],
             ],
             'group_permission' => [
                 ['permission' => 'user.allowSignature', 'group_id' => 5],
@@ -32,8 +32,8 @@ class CreateSignatureTest extends TestCase
                 ['id' => 5, 'name_singular' => 'TestSig', 'name_plural' => 'TestSigs', 'color' => '#FF0000', 'icon' => 'fas fa-user'],
             ],
             'group_user' => [
-                ['user_id' => 4, 'group_id' => 5],
-                ['user_id' => 3, 'group_id' => 4],
+                ['user_id' => 5, 'group_id' => 5],
+                ['user_id' => 4, 'group_id' => 4],
             ],
         ]);
     }
@@ -71,9 +71,9 @@ class CreateSignatureTest extends TestCase
     public function user_can_create_signature_with_permission()
     {
         $response = $this->send(
-            $this->request('PATCH', '/api/users/4',
+            $this->request('PATCH', '/api/users/5',
                 [
-                    'authenticatedAs' => 4,
+                    'authenticatedAs' => 5,
                     'json' => [
                         'data' => [
                             'attributes' => [
@@ -91,8 +91,9 @@ class CreateSignatureTest extends TestCase
 
         $this->assertArrayHasKey('signature', $json['data']['attributes'], 'Creating a signature failed');
         $this->assertEquals('This is my signature', $json['data']['attributes']['signature']);
+        $this->assertEquals('This is my signature', $json['data']['attributes']['signatureHtml']);
 
-        $user = User::find(4);
+        $user = User::find(5);
 
         $this->assertEquals('<t>This is my signature</t>', $user->signature);
     }
@@ -105,7 +106,7 @@ class CreateSignatureTest extends TestCase
         $response = $this->send(
             $this->request('PATCH', '/api/users/2',
                 [
-                    'authenticatedAs' => 4,
+                    'authenticatedAs' => 5,
                     'json' => [
                         'data' => [
                             'attributes' => [
@@ -132,7 +133,7 @@ class CreateSignatureTest extends TestCase
         $response = $this->send(
             $this->request('PATCH', '/api/users/2',
                 [
-                    'authenticatedAs' => 3,
+                    'authenticatedAs' => 4,
                     'json' => [
                         'data' => [
                             'attributes' => [
@@ -148,11 +149,13 @@ class CreateSignatureTest extends TestCase
 
         $json = json_decode($response->getBody()->getContents(), true);
 
+        $this->assertArrayHasKey('data', $json, 'Expecting a data key to be returned');
         $this->assertArrayHasKey('signature', $json['data']['attributes'], 'Expecting a signature to be returned');
         $this->assertEquals('This is my signature', $json['data']['attributes']['signature']);
+        $this->assertEquals('This is my signature', $json['data']['attributes']['signatureHtml']);
 
         $user = User::find(2);
 
-        $this->assertEquals('This is my signature', $user->signature);
+        $this->assertEquals('<t>This is my signature</t>', $user->signature);
     }
 }
