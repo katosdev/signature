@@ -33,6 +33,7 @@ class CreateSignatureTest extends TestCase
             ],
             'group_user' => [
                 ['user_id' => 4, 'group_id' => 5],
+                ['user_id' => 3, 'group_id' => 4],
             ],
         ]);
     }
