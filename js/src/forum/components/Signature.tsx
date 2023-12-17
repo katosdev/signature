@@ -35,18 +35,18 @@ export default class Signature extends Component<SignatureAttrs> {
   }
   renderEditor() {
     if (this.user.canEditSignature()) {
-    return (
-      <div class="SignatureEditor">
-        <TextEditor
-          value={this.signatureState.content()}
-          onchange={this.signatureState.content}
-          placeholder="Edit your signature here"
-          composer={this.signatureState}
-          submitLabel={app.translator.trans('signature.forum.buttons.save')}
-          onsubmit={this.onEditorSubmit.bind(this)}
-        />
-      </div>
-    );
+      return (
+        <div class="SignatureEditor">
+          <TextEditor
+            value={this.signatureState.content()}
+            onchange={this.signatureState.content}
+            placeholder="Edit your signature here"
+            composer={this.signatureState}
+            submitLabel={app.translator.trans('signature.forum.buttons.save')}
+            onsubmit={this.onEditorSubmit.bind(this)}
+          />
+        </div>
+      );
     }
   }
 

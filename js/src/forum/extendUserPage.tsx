@@ -7,20 +7,18 @@ import ItemList from 'flarum/common/utils/ItemList';
 
 export default function extendUserPage() {
   extend(UserPage.prototype, 'navItems', function (items: ItemList<Mithril.Children>) {
-    if (app.session.user) {
-      if ((app.session.user.canUseSignature() || this.user?.id() === app.session.user.id()) || app.session.user.canEditSignature) {
-        items.add(
-          'signature',
-          <LinkButton
-            href={app.route('user.signature', { username: this.user?.username() })}
-            icon="fas fa-signature"
-            class="Button Button--link hasIcon"
-          >
-            {app.translator.trans('signature.forum.buttons.signature')}
-          </LinkButton>,
-          20
-        );
-      }
+    if ((this.user?.canHaveSignature() && this.user?.id() === app.session.user?.id()) || this.user?.canEditSignature()) {
+      items.add(
+        'signature',
+        <LinkButton
+          href={app.route('user.signature', { username: this.user?.username() })}
+          icon="fas fa-signature"
+          class="Button Button--link hasIcon"
+        >
+          {app.translator.trans('signature.forum.buttons.signature')}
+        </LinkButton>,
+        20
+      );
     }
   });
 }

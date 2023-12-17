@@ -51,8 +51,7 @@ class SaveSignatureToDatabase
             $user = $event->user;
             $actor = $event->actor;
 
-            $actor->assertCan('editSignature', $user);
-            $actor->assertCan('allowSignature', $user);
+            $this->checkPermissions($actor, $user);
 
             $this->validator->assertValid(Arr::only($attributes, 'signature'));
 
@@ -73,6 +72,15 @@ class SaveSignatureToDatabase
                     $user->raise(new SignatureSaved($user, $actor->id === $user->id ? null : $actor));
                 });
             }
+        }
+    }
+
+    protected function checkPermissions(User $actor, User $user): void 
+    {
+        if ($actor->id === $user->id) {
+            $user->assertCan('haveSignature');
+        } else {
+            $actor->assertCan('editSignature', $user);
         }
     }
 }

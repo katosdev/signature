@@ -22,11 +22,12 @@ class EditSignatureTest extends TestCase
                 ['id' => 3, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'is_email_confirmed' => true, 'signature' => 'too-obscure'],
                 ['id' => 4, 'username' => 'moderator', 'email' => 'moderator@machine.local', 'signature' => 'too-obscure2'],
                 ['id' => 5, 'username' => 'normal3', 'email' => 'normal3@machine.local', 'is_email_confirmed' => true, 'signature' => 'too-obscure3'],
+                ['id' => 6, 'username' => 'admin2', 'email' => 'admin2@machine.local', 'is_email_confirmed' => true, 'signature' => 'too-obscure4'],
             ],
             'group_permission' => [
-                ['permission' => 'user.allowSignature', 'group_id' => 5],
-                ['permission' => 'user.allowSignature', 'group_id' => 4],
-                ['permission' => 'user.editSignature', 'group_id' => 4],
+                ['permission' => 'haveSignature', 'group_id' => 5],
+                ['permission' => 'haveSignature', 'group_id' => 4],
+                ['permission' => 'moderateSignature', 'group_id' => 4],
             ],
             'groups' => [
                 ['id' => 5, 'name_singular' => 'TestSig', 'name_plural' => 'TestSigs', 'color' => '#FF0000', 'icon' => 'fas fa-user'],
