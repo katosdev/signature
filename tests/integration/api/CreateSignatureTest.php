@@ -47,7 +47,7 @@ class CreateSignatureTest extends TestCase
             )
         );
 
-        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals(403, $response->getStatusCode(), 'User without permission can create signature');
 
         $json = json_decode($response->getBody()->getContents(), true);
 
@@ -82,6 +82,7 @@ class CreateSignatureTest extends TestCase
 
         $json = json_decode($response->getBody()->getContents(), true);
 
+        $this->assertArrayHasKey('signature', $json['data']['attributes'], 'Creating a signature failed');
         $this->assertEquals('This is my signature', $json['data']['attributes']['signature']);
 
         $user = User::find(2);
@@ -109,7 +110,7 @@ class CreateSignatureTest extends TestCase
             )
         );
 
-        $this->assertEquals(403, $response->getStatusCode());
+        $this->assertEquals(403, $response->getStatusCode(), 'Expecting a permission denied 403');
 
         $json = json_decode($response->getBody()->getContents(), true);
 
@@ -144,6 +145,7 @@ class CreateSignatureTest extends TestCase
 
         $json = json_decode($response->getBody()->getContents(), true);
 
+        $this->assertArrayHasKey('signature', $json['data']['attributes'], 'Expecting a signature to be returned');
         $this->assertEquals('This is my signature', $json['data']['attributes']['signature']);
 
         $user = User::find(2);
