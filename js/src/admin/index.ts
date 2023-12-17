@@ -17,7 +17,7 @@ app.initializers.add('katosdev-signature', () => {
     })
     .registerPermission(
       {
-        permission: 'user.editSignature',
+        permission: 'moderateSignature',
         icon: 'fas fa-signature',
         label: app.translator.trans('signature.admin.permissions.edit_signature_others'),
       },
@@ -25,7 +25,7 @@ app.initializers.add('katosdev-signature', () => {
     )
     .registerPermission(
       {
-        permission: 'user.allowSignature',
+        permission: 'haveSignature',
         icon: 'fas fa-signature',
         label: app.translator.trans('signature.admin.permissions.allow_signature'),
       },

@@ -24,9 +24,9 @@ class CreateSignatureTest extends TestCase
                 ['id' => 5, 'username' => 'normal3', 'email' => 'normal3@machine.local', 'is_email_confirmed' => true],
             ],
             'group_permission' => [
-                ['permission' => 'user.allowSignature', 'group_id' => 5],
-                ['permission' => 'user.allowSignature', 'group_id' => 4],
-                ['permission' => 'user.editSignature', 'group_id' => 4],
+                ['permission' => 'haveSignature', 'group_id' => 5],
+                ['permission' => 'haveSignature', 'group_id' => 4],
+                ['permission' => 'moderateSignature', 'group_id' => 4],
             ],
             'groups' => [
                 ['id' => 5, 'name_singular' => 'TestSig', 'name_plural' => 'TestSigs', 'color' => '#FF0000', 'icon' => 'fas fa-user'],
@@ -128,10 +128,10 @@ class CreateSignatureTest extends TestCase
     /**
      * @test
      */
-    public function user_with_permission_can_create_signature_for_other_user()
+    public function user_with_permission_can_create_signature_for_other_user_who_can_have_signature()
     {
         $response = $this->send(
-            $this->request('PATCH', '/api/users/2',
+            $this->request('PATCH', '/api/users/5',
                 [
                     'authenticatedAs' => 4,
                     'json' => [
@@ -154,8 +154,35 @@ class CreateSignatureTest extends TestCase
         $this->assertEquals('This is my signature', $json['data']['attributes']['signature']);
         $this->assertEquals('This is my signature', $json['data']['attributes']['signatureHtml']);
 
-        $user = User::find(2);
+        $user = User::find(5);
 
         $this->assertEquals('<t>This is my signature</t>', $user->signature);
+    }
+
+    /**
+     * @test
+     */
+    public function user_with_permission_cannot_create_signature_for_other_user_who_cannot_have_signature()
+    {
+        $response = $this->send(
+            $this->request('PATCH', '/api/users/2',
+                [
+                    'authenticatedAs' => 4,
+                    'json' => [
+                        'data' => [
+                            'attributes' => [
+                                'signature' => 'This is my signature',
+                            ],
+                        ],
+                    ],
+                ]
+            )
+        );
+
+        $this->assertEquals(403, $response->getStatusCode(), 'Expecting a permission denied 403');
+
+        $user = User::find(2);
+
+        $this->assertNull($user->signature);
     }
 }

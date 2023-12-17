@@ -10,5 +10,5 @@ export default [
     .attribute<string>('signature')
     .attribute<string>('signatureHtml')
     .attribute<boolean>('canEditSignature')
-    .attribute<boolean>('canUseSignature'),
+    .attribute<boolean>('canHaveSignature'),
 ];
