@@ -20,7 +20,7 @@ class EditSignatureTest extends TestCase
             'users' => [
                 $this->normalUser(),
                 ['id' => 3, 'username' => 'normal2', 'email' => 'normal2@machine.local', 'is_email_confirmed' => true, 'signature' => 'too-obscure'],
-                ['id' => 4, 'username' => 'moderator', 'email' => 'moderator@machine.local', 'signature' => 'too-obscure2'],
+                ['id' => 4, 'username' => 'moderator', 'email' => 'moderator@machine.local', 'is_email_confirmed' => true, 'signature' => 'too-obscure2'],
                 ['id' => 5, 'username' => 'normal3', 'email' => 'normal3@machine.local', 'is_email_confirmed' => true, 'signature' => 'too-obscure3'],
                 ['id' => 6, 'username' => 'admin2', 'email' => 'admin2@machine.local', 'is_email_confirmed' => true, 'signature' => 'too-obscure4'],
             ],
@@ -67,5 +67,32 @@ class EditSignatureTest extends TestCase
         $user = User::find(5);
 
         $this->assertEquals('<t>This is my new signature</t>', $user->signature);
+    }
+
+    /**
+     * @test
+     */
+    public function user_with_edit_permission_cannot_edit_admin_signature()
+    {
+        $response = $this->send(
+            $this->request('PATCH', '/api/users/6',
+                [
+                    'authenticatedAs' => 5,
+                    'json' => [
+                        'data' => [
+                            'attributes' => [
+                                'signature' => 'This is my new signature',
+                            ],
+                        ],
+                    ],
+                ]
+            )
+        );
+
+        $this->assertEquals(403, $response->getStatusCode(), 'User with edit permission can edit admin signature');
+
+        $user = User::find(6);
+
+        $this->assertEquals('too-obscure4', $user->signature);
     }
 }

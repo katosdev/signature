@@ -25,7 +25,7 @@ class AddUserAttributes
         $actor = $serializer->getActor();
 
         $attributes['canEditSignature'] = $actor->can('editSignature', $user);
-        $attributes['canHaveSignature'] = $actor->hasPermission('haveSignature');
+        $attributes['canHaveSignature'] = $user->hasPermission('haveSignature');
 
         return $attributes;
     }
