@@ -34,7 +34,7 @@ class SaveSignatureToDatabase
      * @var SignatureFormatter
      */
     protected $formatter;
-    
+
     public function __construct(SettingsRepositoryInterface $settings, Dispatcher $events, SignatureValidator $validator, SignatureFormatter $formatter)
     {
         $this->settings = $settings;
@@ -42,45 +42,47 @@ class SaveSignatureToDatabase
         $this->validator = $validator;
         $this->formatter = $formatter;
     }
-    
+
     public function handle(Saving $event)
     {
         $attributes = Arr::get($event->data, 'attributes', []);
+        if (!Arr::exists($attributes, 'signature')) {
+            return;
+        }
 
-        if (Arr::exists($attributes, 'signature')) {
-            $user = $event->user;
-            $actor = $event->actor;
+        $user = $event->user;
+        $actor = $event->actor;
 
-            $this->checkPermissions($actor, $user);
+        $this->checkPermissions($actor, $user);
+        $this->processSignature($attributes, $user, $actor);
+    }
 
-            $this->validator->assertValid(Arr::only($attributes, 'signature'));
+    protected function processSignature($attributes, User $user, User $actor): void
+    {
+        $this->validator->assertValid(Arr::only($attributes, 'signature'));
+        $signature = Str::of(Arr::get($attributes, 'signature'))->trim();
 
-            $signature = Str::of(Arr::get($attributes, 'signature'))->trim();
+        $user->signature = $signature->isEmpty() ? null : $this->formatter->parse($signature);
 
-            if ($signature->isEmpty()) {
-                $signature = null;
-            }
-
-            $user->signature = $signature ? $this->formatter->parse($signature) : null;
-
-            if ($user->isDirty('signature')) {
-                $this->events->dispatch(
-                    new SignatureSaving($user, $actor->id === $user->id ? null : $actor)
-                );
-
-                $user->afterSave(function (User $user) use ($actor) {
-                    $user->raise(new SignatureSaved($user, $actor->id === $user->id ? null : $actor));
-                });
-            }
+        if ($user->isDirty('signature')) {
+            $this->dispatchEvents($user, $actor);
         }
     }
 
-    protected function checkPermissions(User $actor, User $user): void 
+    protected function dispatchEvents(User $user, User $actor): void
     {
-        if ($actor->id === $user->id) {
-            $user->assertCan('haveSignature');
-        } else {
-            $actor->assertCan('editSignature', $user);
+        $this->events->dispatch(new SignatureSaving($user, $actor->id === $user->id ? null : $actor));
+        $user->afterSave(function (User $user) use ($actor) {
+            $user->raise(new SignatureSaved($user, $actor->id === $user->id ? null : $actor));
+        });
+    }
+
+    protected function checkPermissions(User $actor, User $user): void
+    {
+        $user->assertCan('haveSignature');
+        
+        if ($actor->id !== $user->id) {
+            $actor->assertCan('moderateSignature');
         }
     }
 }
