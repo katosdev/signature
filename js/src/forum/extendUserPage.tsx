@@ -13,7 +13,6 @@ export default function extendUserPage() {
         <LinkButton
           href={app.route('user.signature', { username: this.user?.username() })}
           icon="fas fa-signature"
-          class="Button Button--link hasIcon"
         >
           {app.translator.trans('signature.forum.buttons.signature')}
         </LinkButton>,
