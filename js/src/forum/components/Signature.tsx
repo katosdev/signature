@@ -34,7 +34,7 @@ export default class Signature extends Component<SignatureAttrs> {
     );
   }
   renderEditor() {
-    if (this.user.canEditSignature()) {
+    if (this.user.canEditSignature() && !this.attrs.readonly) {
       return (
         <div class="SignatureEditor">
           <TextEditor
@@ -63,7 +63,7 @@ export default class Signature extends Component<SignatureAttrs> {
   }
 
   edit() {
-    if (this.user.canEditSignature()) {
+    if (this.user.canEditSignature() && !this.attrs.readonly) {
       this.signatureState.toggleEditing();
       m.redraw();
     }
