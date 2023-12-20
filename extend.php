@@ -27,7 +27,8 @@ return [
     (new Extend\Settings())
         ->default('signature.maximum_char_limit', 500)
         ->default('signature.maximum_image_count', 2)
-        ->serializeToForum('allowInlineEditing', 'signature.allow_inline_editing', 'boolval', false),
+        ->default('signature.allow_inline_editing', false)
+        ->serializeToForum('allowInlineEditing', 'signature.allow_inline_editing', 'boolval'),
 
     (new Extend\Model(User::class))
         ->cast('signature', 'string'),
