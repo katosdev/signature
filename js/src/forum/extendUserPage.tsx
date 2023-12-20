@@ -11,7 +11,7 @@ export default function extendUserPage() {
       items.add(
         'signature',
         <LinkButton
-          href={app.route('user.signature', { username: this.user?.username() })}
+          href={app.route('user.signature', { username: this.user?.slug() })}
           icon="fas fa-signature"
           class="Button Button--link hasIcon"
         >
