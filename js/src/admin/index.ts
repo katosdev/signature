@@ -16,10 +16,10 @@ app.initializers.add('katosdev-signature', () => {
       help: app.translator.trans('signature.admin.settings.maximum_char_limit.help'),
     })
     .registerSetting({
-      setting: 'signature.inline_editing',
+      setting: 'signature.allow_inline_editing',
       type: 'boolean',
-      label: app.translator.trans('signature.admin.settings.inline_editing.description'),
-      help: app.translator.trans('signature.admin.settings.inline_editing.help'),
+      label: app.translator.trans('signature.admin.settings.allow_inline_editing.description'),
+      help: app.translator.trans('signature.admin.settings.allow_inline_editing.help'),
     })
     .registerPermission(
       {
